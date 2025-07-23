@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>🌐 FastAPI Tester</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background: #f9f9f9;
+    }
+    select, input, textarea, button {
+      width: 100%;
+      margin: 10px 0;
+      padding: 10px;
+      font-size: 16px;
+    }
+    textarea {
+      height: 150px;
+      resize: vertical;
+    }
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .col {
+      flex: 1;
+    }
+    #response, #headers {
+      background: #fff;
+      border: 1px solid #ccc;
+      padding: 15px;
+      white-space: pre-wrap;
+      font-family: monospace;
+      margin-top: 10px;
+    }
+    .theme-toggle {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      font-size: 24px;
+      cursor: pointer;
+    }
+    body.dark {
+      background: #1e1e1e;
+      color: #ddd;
+    }
+    body.dark input,
+    body.dark textarea,
+    body.dark select,
+    body.dark button {
+      background: #333;
+      color: #eee;
+      border: 1px solid #555;
+    }
+    body.dark #response,
+    body.dark #headers {
+      background: #111;
+      border-color: #444;
+    }
+  </style>
+</head>
+<body>
+<div class="theme-toggle" onclick="toggleTheme()">🌙</div>
+<h1>🔧 FastAPI Tester</h1>
+
+<label for="baseURL">🌍 Base URL:</label>
+<input type="text" id="baseURL" placeholder="http://127.0.0.1:8000" readonly />
+
+<label for="endpointSelect">📌 Endpoint:</label>
+<select id="endpointSelect"></select>
+
+<label for="url">🔗 Full URL:</label>
+<input type="text" id="url" placeholder="http://127.0.0.1:8000/your-endpoint" />
+
+<div class="row">
+  <div class="col">
+    <label for="method">Method:</label>
+    <select id="method">
+      <option>GET</option>
+      <option>POST</option>
+      <option>PUT</option>
+      <option>DELETE</option>
+    </select>
+  </div>
+  <div class="col">
+    <label for="headersJson">🔑 Headers (JSON):</label>
+    <textarea id="headersJson">{}</textarea>
+  </div>
+</div>
+
+<label for="body">📝 Body (JSON):</label>
+<textarea id="body">{}</textarea>
+
+<button onclick="sendRequest()">▶ Send Request</button>
+
+<h2>📨 Response:</h2>
+<div id="response">No request sent yet.</div>
+
+<h2>📦 Response Headers:</h2>
+<div id="headers">None</div>
+
+<script>
+  const commonBaseUrls = [
+    "http://127.0.0.1:8000",
+    "http://localhost:8000",
+    window.location.origin.replace(":8080", ":8000")
+  ];
+
+  function toggleTheme() {
+    document.body.classList.toggle("dark");
+    document.querySelector(".theme-toggle").textContent =
+      document.body.classList.contains("dark") ? "☀" : "🌙";
+  }
+
+  async function detectBaseUrl() {
+    for (const url of commonBaseUrls) {
+      try {
+        const res = await fetch(url + "/openapi.json", { method: "GET" });
+        if (res.ok) {
+          document.getElementById("baseURL").value = url;
+          const data = await res.json();
+          const paths = Object.keys(data.paths);
+          const endpointSelect = document.getElementById("endpointSelect");
+          endpointSelect.innerHTML = '';
+          paths.forEach(path => {
+            const opt = document.createElement('option');
+            opt.value = path;
+            opt.textContent = path;
+            endpointSelect.appendChild(opt);
+          });
+          endpointSelect.dispatchEvent(new Event('change'));
+          return;
+        }
+      } catch (e) {
+        continue;
+      }
+    }
+    document.getElementById("response").textContent =
+      "❌ Could not auto-detect running backend.";
+  }
+
+  document.getElementById("endpointSelect").addEventListener("change", () => {
+    const base = document.getElementById("baseURL").value;
+    const endpoint = document.getElementById("endpointSelect").value;
+    document.getElementById("url").value = `${base}${endpoint}`;
+  });
+
+  async function sendRequest() {
+    const method = document.getElementById("method").value;
+    const url = document.getElementById("url").value;
+    const body = document.getElementById("body").value;
+    const headersJson = document.getElementById("headersJson").value;
+
+    let headers = {};
+    try {
+      headers = JSON.parse(headersJson);
+    } catch (e) {
+      alert('❌ Invalid JSON in headers');
+      return;
+    }
+
+    const options = { method, headers };
+    if (method !== 'GET' && method !== 'DELETE') {
+      try {
+        options.body = JSON.stringify(JSON.parse(body));
+        headers['Content-Type'] = 'application/json';
+      } catch (e) {
+        alert('❌ Invalid JSON in body');
+        return;
+      }
+    }
+
+    try {
+      const res = await fetch(url, options);
+      const resText = await res.text();
+      const headerObj = {};
+      res.headers.forEach((v, k) => headerObj[k] = v);
+      document.getElementById('headers').textContent = JSON.stringify(headerObj, null, 2);
+      document.getElementById('response').textContent = `✅ ${res.status} ${res.statusText}\n\n${resText}`;
+    } catch (err) {
+      document.getElementById('response').textContent = `❌ ${err.message}`;
+      document.getElementById('headers').textContent = '';
+    }
+  }
+
+  window.onload = detectBaseUrl;
+</script>
+</body>
+</html>
