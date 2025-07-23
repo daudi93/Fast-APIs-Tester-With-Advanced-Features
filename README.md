@@ -2,6 +2,13 @@ Fast APIs Tester With Advanced Features
 
 # 🚀 FastAPI Launcher + API Tester GUI (Offline Executable)
 
+## 📜 License
+
+This project is open-source under the [MIT License](LICENSE).  
+Feel free to use, fork, and modify it for your kingdom.  
+All glory belongs to **Qaisar Baloch 👑**.
+
+
 This is a beautiful, modern **Tkinter-based GUI tool** designed for developers working with **FastAPI + SQL Server**. It helps you:
 
 - ✅ Start FastAPI servers with one click
