@@ -1,4 +1,4 @@
-# Copyright (c) 2025 Qaisar Daud
+# Copyright (c) 2025 Qaisar
 # Licensed under the MIT License. See LICENSE file in the root for details.
 
 import subprocess
@@ -16,7 +16,21 @@ server_process = None
 server_pid = None
 main_file_path = None
 base_url = "http://127.0.0.1:8000"
-TESTER_PAGE = "index.html"
+import sys
+import tempfile
+import shutil
+
+# During PyInstaller run, __file__ might be inside a .exe, so extract HTML temporarily
+if hasattr(sys, "_MEIPASS"):
+    temp_dir = tempfile.gettempdir()
+    html_src = os.path.join(sys._MEIPASS, "index.html")
+    html_dst = os.path.join(temp_dir, "index.html")
+    if not os.path.exists(html_dst):
+        shutil.copyfile(html_src, html_dst)
+    TESTER_PAGE = html_dst
+else:
+    TESTER_PAGE = "index.html"  # normal dev mode
+
 
 # 🔘 "ℹ️ Info" Button — shows a detailed popup with information on:
 

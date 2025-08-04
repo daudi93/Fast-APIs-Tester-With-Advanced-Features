@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>🌐 FastAPI Tester Pro</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="index.js" defer></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+  <div class="theme-toggle" onclick="toggleTheme()">🌙</div>
+  
+  <div class="container">
+    <h1>FastAPI Tester Pro</h1>
+    
+    <div id="connectionStatus"></div>
+
+    <div class="row">
+      <div class="col">
+        <label for="baseURL">🌍 Base URL:</label>
+        <input type="text" id="baseURL" placeholder="http://127.0.0.1:8000" />
+      </div>
+      <div class="col">
+        <label for="apiSchema">📄 Schema Path:</label>
+        <input type="text" id="apiSchema" placeholder="/openapi.json" value="/openapi.json" />
+      </div>
+    </div>
+
+    <label for="endpointSelect">📌 Endpoint:</label><br>
+    <select id="endpointSelect">
+      <option value="">Select an endpoint</option>
+    </select><br>
+
+    <label for="url">🔗 Full URL:</label>
+    <input type="text" id="url" placeholder="http://127.0.0.1:8000/your-endpoint" />
+
+    <br><label for="method">Method:</label>
+    <div class="row">
+      <div class="col">
+        <select id="method">
+          <option>GET</option>
+          <option>POST</option>
+          <option>PUT</option>
+          <option>DELETE</option>
+          <option>PATCH</option>
+        </select>
+      </div>
+      <div class="col">
+        <label for="headersJson">🔑 Headers (JSON):</label>
+        <textarea id="headersJson">{}</textarea>
+      </div>
+    </div>
+
+    <label for="body">📝 Body (JSON):</label>
+    <textarea id="body">{}</textarea>
+
+    <button onclick="sendRequest()">
+      <span id="sendIcon">▶</span> Send Request
+    </button>
+
+    <h2>📨 Response:</h2>
+    <div id="response">No request sent yet.</div>
+
+    <h2>📦 Response Headers:</h2>
+    <div id="headers">None</div>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-section about">
+        <div class="logo-container">
+          <div class="api-logo">
+            <div class="cube">
+              <div class="face front"></div>
+              <div class="face back"></div>
+              <div class="face right"></div>
+              <div class="face left"></div>
+              <div class="face top"></div>
+              <div class="face bottom"></div>
+            </div>
+            <span class="logo-pulse"></span>
+          </div>
+          <h3>FastAPI Tester Pro</h3>
+        </div>
+        <p>A powerful tool for testing API endpoints with intelligent automation</p>
+        <div class="contact">
+          <span><i class="fas fa-envelope"></i> mypublic681@gmail.com</span>
+        </div>
+      </div>
+      
+      <div class="footer-section links">
+        <h3>Quick Links</h3>
+        <ul>
+          <li><a href="#" class="link-hover" onclick="document.getElementById('baseURL').focus()">
+            <span class="link-icon"><i class="fas fa-link"></i></span>
+            <span class="link-text">Change Base URL</span>
+          </a></li>
+          <li><a href="#" class="link-hover" onclick="document.getElementById('endpointSelect').focus()">
+            <span class="link-icon"><i class="fas fa-list-ul"></i></span>
+            <span class="link-text">Select Endpoint</span>
+          </a></li>
+          <li><a href="#" class="link-hover" onclick="document.getElementById('method').focus()">
+            <span class="link-icon"><i class="fas fa-exchange-alt"></i></span>
+            <span class="link-text">Switch Method</span>
+          </a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-section social">
+        <h3>Connect With Me</h3>
+        <div class="social-icons">
+          <a href="https://github.com/daudi93" target="_blank" class="social-icon">
+            <i class="fab fa-github"></i>
+            <span class="icon-tooltip">GitHub</span>
+          </a>
+          <a href="https://www.linkedin.com/in/qaisar-daud-60454a289" target="_blank" class="social-icon">
+            <i class="fab fa-linkedin-in"></i>
+            <span class="icon-tooltip">LinkedIn</span>
+          </a>
+          <a href="mailto:mypublic681@gmail.com" class="social-icon">
+            <i class="fas fa-envelope"></i>
+            <span class="icon-tooltip">Email</span>
+          </a>
+          <a href="https://personalportfolio-3a3da.web.app/" target="_blank" class="social-icon">
+            <i class="fas fa-globe"></i>
+            <span class="icon-tooltip">Portfolio</span>
+          </a>
+        </div>
+        <div class="credits">
+          <p class="heart-beat">PowerdBy: daudi</p>
+          <p>© <span class="current-year"></span> FastAPI Tester Pro</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="footer-bottom">
+      <p>MIT Licensed | Version 1.0.0</p>
+    </div>
+  </footer>
+</body>
+</html>
